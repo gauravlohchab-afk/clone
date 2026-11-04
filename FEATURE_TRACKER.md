@@ -2,15 +2,15 @@
 
 Statuses: NOT STARTED · IN PROGRESS · IMPLEMENTED · TESTED · BLOCKED. A column is TESTED only when automated tests covering it have passed. Last updated: 2026-11-04.
 
-**Test evidence (2026-11-04):** packages 43 unit tests pass · API 21 unit/HTTP tests pass · web 5 component tests pass · API integration suite (31 tests across auth and profiles) written but **not yet executed** because the build sandbox cannot download a MongoDB binary. Rows that depend on that suite are IMPLEMENTED, not TESTED.
+**Test evidence (2026-11-04):** packages 44 unit tests pass · API 21 unit/HTTP tests pass · web 5 component tests pass · mobile 7 Jest tests pass and iOS + Android bundles export with `expo export` · API integration suite (31 tests across auth and profiles) written but **not yet executed** because the build sandbox cannot download a MongoDB binary. Rows that depend on that suite are IMPLEMENTED, not TESTED.
 
 ## Phase 0 — Foundations
 | Feature | Frontend | Backend | Database | Integration | Tests | Remaining issues |
 |---|---|---|---|---|---|---|
 | Monorepo (pnpm workspaces, shared TS config) | IMPLEMENTED | IMPLEMENTED | – | IMPLEMENTED | TESTED | No GitHub repository yet; no lint config |
-| Brand config (provisional name) | IMPLEMENTED | IMPLEMENTED | – | IMPLEMENTED | TESTED | Name/domain/trademark unverified |
+| Brand config (provisional name) | IMPLEMENTED | IMPLEMENTED | – | IMPLEMENTED | TESTED | Name/domain/trademark unverified; mobile bundle id `app.vyro.dev` is a placeholder until you own one |
 | Design tokens, light/dark themes | IMPLEMENTED | – | – | IMPLEMENTED | TESTED | WCAG AA contrast unit-tested; RN theme pending mobile |
-| Logo, app icon, wordmark | IMPLEMENTED | – | – | – | – | Needs designer review and PNG exports for stores |
+| Logo, app icon, wordmark | IMPLEMENTED | – | – | – | – | 1024 px icon, adaptive icon and splash PNGs generated; needs designer review |
 | Component library (web) | IMPLEMENTED | – | – | – | IN PROGRESS | Button/Field/Alert/Toggle/Select/Avatar; no Storybook |
 | Planning docs | – | – | – | – | – | See docs/PLANNING.md |
 
@@ -46,7 +46,13 @@ Statuses: NOT STARTED · IN PROGRESS · IMPLEMENTED · TESTED · BLOCKED. A colu
 | Profile sharing | IMPLEMENTED | – | – | IMPLEMENTED | NOT STARTED | Web Share API / clipboard |
 | Settings: privacy, interactions, hidden words, theme, language, region, notifications | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Only English UI; enforcement of interaction rules arrives with the features they govern |
 | Legal pages (terms, privacy, guidelines) | IMPLEMENTED | – | – | – | – | DRAFTS ONLY — not legally reviewed |
-| Mobile app (auth, onboarding, profile, settings) | NOT STARTED | – | – | – | NOT STARTED | Next step (Phase 1b) |
+| Mobile app shell (Expo SDK 57, Expo Router, secure token store) | IMPLEMENTED | – | – | IMPLEMENTED | IN PROGRESS | Bundles build for iOS and Android; not yet run on a simulator or device (none in the build sandbox) |
+| Mobile auth (welcome, signup, login + 2FA, forgot/reset password) | IMPLEMENTED | – | – | IMPLEMENTED | IN PROGRESS | Login + 2FA screen TESTED with Jest; Google button waits for client IDs |
+| Mobile onboarding (verify, username, about, interests) | IMPLEMENTED | – | – | IMPLEMENTED | NOT STARTED | Photo step BLOCKED on media storage |
+| Mobile profile + pull-to-refresh + share | IMPLEMENTED | – | – | IMPLEMENTED | NOT STARTED | |
+| Mobile settings (edit profile, privacy, security, preferences, account) | IMPLEMENTED | – | – | IMPLEMENTED | NOT STARTED | 2FA setup uses otpauth link + copyable key; data export shares JSON via the system share sheet |
+| Mobile deep links (`vyro://verify-email`, `reset-password`, `u/<username>`) | IMPLEMENTED | – | – | IN PROGRESS | NOT STARTED | Emails link to the web app today; https universal/app links BLOCKED on a domain |
+| Push notifications | NOT STARTED | NOT STARTED | NOT STARTED | BLOCKED | NOT STARTED | Phase 4; needs EAS project + APNs/FCM |
 | Admin app | NOT STARTED | NOT STARTED | – | – | NOT STARTED | Phase 5 |
 
 ## Later phases

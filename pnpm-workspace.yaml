@@ -5,3 +5,9 @@ onlyBuiltDependencies:
   - argon2
   - esbuild
   - mongodb-memory-server
+# One React version across web and mobile (Expo SDK 57 pins React 19.2.3).
+overrides:
+  react: 19.2.3
+  react-dom: 19.2.3
+  "@types/react": ~19.2.0
+  "@types/react-dom": ~19.2.0

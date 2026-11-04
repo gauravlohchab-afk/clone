@@ -32,18 +32,19 @@ src/
 ```
 Access tokens live in memory; the refresh token is an httpOnly, SameSite=Strict cookie scoped to `/api/v1/auth`, with a double-submit CSRF token.
 
-## 5. Mobile application structure (planned, Phase 1b)
+## 5. Mobile application structure (Phase 1b, implemented)
 
-`apps/mobile` — Expo (SDK current stable) + Expo Router + NativeWind + Zustand, sharing `@vyro/types`, `@vyro/validation`, `@vyro/shared` (API client with `TokenStore` backed by `expo-secure-store`) and `@vyro/ui` tokens.
+`apps/mobile` — Expo SDK 57 (React Native 0.86, React 19.2.3) + Expo Router + Zustand. Styling uses React Native StyleSheet driven by `@vyro/ui` tokens rather than NativeWind, to avoid a styling compiler whose support for React Native 0.86 is unproven. The app shares `@vyro/types`, `@vyro/validation`, `@vyro/shared` (API client with a `TokenStore` backed by `expo-secure-store`) and `@vyro/ui` tokens.
 
 ```
-app/(auth)/        welcome, signup, login, forgot-password, mfa
-app/(onboarding)/  verify, username, about, interests
-app/(tabs)/        home, explore, create, reels, profile
-app/settings/...   mirrors web settings
-app/[username].tsx deep-linkable profiles
-lib/ api.ts, secure-token-store.ts, push.ts
+app/(auth)/            welcome, signup, login (+2FA step), forgot-password
+app/onboarding.tsx     verify, username, about, interests
+app/(app)/             bottom tabs: profile, settings (stack: profile, privacy, security, preferences, account)
+app/u/[username].tsx   deep-linkable public profiles
+app/verify-email.tsx, app/reset-password.tsx   deep-link targets
+lib/  api.ts (shared client), secure-tokens.ts (Keychain/Keystore), links.ts, useSettings.ts
 ```
+Home, Explore, Create, Reels and Messages tabs are added as their phases ship.
 Universal links / App Links require a real domain (BLOCKED until the domain is secured).
 
 ## 6. Backend structure

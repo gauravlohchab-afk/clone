@@ -30,7 +30,7 @@
 | `packages/ui` | Design tokens, Tailwind theme, logo assets, contrast checks |
 | `apps/api` | REST API, auth, business logic |
 | `apps/web` | Responsive web app |
-| `apps/mobile` | Expo app (Phase 1b) |
+| `apps/mobile` | Expo SDK 57 app for iOS and Android |
 | `apps/admin` | Admin and moderation console (Phase 5) |
 
 Workspace packages ship TypeScript source; Vite and tsx consume it directly and `tsup` bundles it into the API build.

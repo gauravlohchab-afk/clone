@@ -59,3 +59,18 @@ describe('createApiClient', () => {
     expect(onSessionExpired).toHaveBeenCalled();
   });
 });
+
+import { mergeSettings } from '../src/index.js';
+describe('mergeSettings', () => {
+  it('merges nested privacy and notification patches without dropping keys', () => {
+    const base = {
+      theme: 'system', language: 'en', timezone: 'UTC', country: '',
+      privacy: { showActivityStatus: true, allowMentionsFrom: 'everyone', allowMessagesFrom: 'everyone', allowCommentsFrom: 'everyone', hiddenWords: [] },
+      notifications: { likes: true, comments: true, follows: true, mentions: true, messages: true, email: true, push: true },
+    } as const;
+    const next = mergeSettings(structuredClone(base) as never, { theme: 'dark', privacy: { allowMessagesFrom: 'nobody' }, notifications: { likes: false } });
+    expect(next.theme).toBe('dark');
+    expect(next.privacy).toMatchObject({ allowMessagesFrom: 'nobody', allowMentionsFrom: 'everyone' });
+    expect(next.notifications).toMatchObject({ likes: false, comments: true });
+  });
+});

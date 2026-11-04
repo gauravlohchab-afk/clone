@@ -47,6 +47,24 @@ MONGODB_URI_TEST="mongodb://127.0.0.1:27017/vyro_test?replicaSet=rs0" pnpm --fil
 
 Phase 3 will add: `AWS_REGION`, `S3_MEDIA_BUCKET`, `CLOUDFRONT_DOMAIN`, `CLOUDFRONT_KEY_PAIR_ID`, `CLOUDFRONT_PRIVATE_KEY` (secret manager), `MEDIACONVERT_ENDPOINT`. Phase 4: `EXPO_ACCESS_TOKEN`.
 
+## Mobile (`apps/mobile`)
+```bash
+cp apps/mobile/.env.example apps/mobile/.env
+pnpm --filter @vyro/mobile start        # then press i (iOS simulator) or a (Android emulator), or scan with Expo Go
+pnpm --filter @vyro/mobile test         # Jest (jest-expo)
+pnpm --filter @vyro/mobile export       # production JS bundles for iOS and Android
+```
+| Variable | Description |
+|---|---|
+| `EXPO_PUBLIC_API_URL` | API origin reachable from the device (Android emulator: `http://10.0.2.2:4000`) |
+| `EXPO_PUBLIC_WEB_URL` | Web origin for legal pages and profile share links |
+| `EXPO_PUBLIC_BRAND_NAME`, `EXPO_PUBLIC_BRAND_TAGLINE` | Brand overrides |
+| `APP_BUNDLE_ID` | iOS bundle id / Android package (default `app.vyro.dev` is a placeholder) |
+| `APP_SCHEME` | Deep link scheme (default `vyro`) |
+| `APP_LINK_DOMAIN` | Domain for iOS universal links / Android app links once one exists |
+
+Store builds need an Expo (EAS) account, an Apple Developer account and a Google Play Console account.
+
 ## Web variables (`apps/web/.env`)
 | Variable | Description |
 |---|---|

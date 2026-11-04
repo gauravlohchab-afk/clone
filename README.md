@@ -2,13 +2,13 @@
 
 **Your world. Your energy.** An original social platform for creating, connecting and discovering — web, iOS and Android on one backend.
 
-> Status: Phase 1 (accounts) in progress. Not production-ready. See [FEATURE_TRACKER.md](FEATURE_TRACKER.md) for an honest per-feature status and [docs/PLANNING.md](docs/PLANNING.md) for the plan and the external services still needed.
+> Status: Phase 1 (accounts) code complete on web, iOS and Android; API integration run pending. Not production-ready. See [FEATURE_TRACKER.md](FEATURE_TRACKER.md) for an honest per-feature status and [docs/PLANNING.md](docs/PLANNING.md) for the plan and the external services still needed.
 
 ## Repository
 ```
 apps/api        Express 5 + TypeScript API (modular monolith)
 apps/web        React 19 + Vite + Tailwind 4 web app
-apps/mobile     Expo app (Phase 1b, not started)
+apps/mobile     Expo SDK 57 iOS + Android app
 apps/admin      Admin console (Phase 5, not started)
 packages/       config · types · validation · shared · ui
 infrastructure/ aws · deployment · monitoring (planned)

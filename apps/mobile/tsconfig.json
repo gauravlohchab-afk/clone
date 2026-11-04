@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "verbatimModuleSyntax": false,
+    "types": ["jest"]
+  },
+  "include": ["app", "components", "lib", "stores", "test", "app.config.ts", "expo-env.d.ts"]
+}

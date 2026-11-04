@@ -6,7 +6,7 @@ Each phase ends with its tests green, FEATURE_TRACKER.md updated and a working b
 |---|---|---|---|
 | 0 | Architecture, brand, design system, planning | Docs, tokens, logo | Done (provisional brand) |
 | 1 | Monorepo, shared packages, API foundation, auth, profiles, settings, web auth/onboarding/profile/settings | Integration suite green against a real replica set | In progress — code complete for web + API; integration run pending; mobile is Phase 1b |
-| 1b | Expo app: auth, onboarding, profile, settings; secure token store; deep links | Runs on iOS simulator + Android emulator; Maestro smoke flow | Not started |
+| 1b | Expo app: auth, onboarding, profile, settings; secure token store; deep links | Runs on iOS simulator + Android emulator; Maestro smoke flow | Code complete, bundles export, Jest green; simulator/device run pending |
 | 2 | Follows/requests, blocks/mutes, posts (text metadata + media refs), comments, likes, saves, collections, hashtags, mentions, feed v1 ranking, explore, search | Privacy matrix tests (public/private/blocked) pass | Not started |
 | 3 | Media pipeline (S3 presign, multipart, sharp, video transcode, thumbnails, CloudFront signed URLs), create-post editor, stories (+ expiry jobs), highlights, reels player | Upload/process/serve E2E against real AWS | Blocked on AWS |
 | 4 | Socket.IO gateway, conversations, messages, requests, receipts, typing, presence, notifications, push tokens + Expo push | Authorization tests on every socket event | Not started |

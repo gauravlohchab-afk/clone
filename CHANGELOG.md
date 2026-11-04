@@ -2,6 +2,9 @@
 
 ## 0.1.0 — 2026-11-04 (unreleased)
 ### Added
+- Mobile app (Expo SDK 57): welcome, signup, login with 2FA, forgot/reset password, email verification and profile deep links, onboarding, profile with pull-to-refresh and sharing, settings (edit profile, privacy, security with 2FA and sessions, preferences, account). Refresh token kept in the Keychain/Keystore.
+- App icon, adaptive icon and splash PNGs generated from the mark.
+- One React version (19.2.3) across web and mobile; shared `mergeSettings` helper.
 - pnpm monorepo with `config`, `types`, `validation`, `shared`, `ui` packages.
 - Brand identity: original mark, wordmark, app icon, tokens, light/dark themes with tested contrast.
 - API: Express 5 modular monolith with structured logging, security headers, CORS allowlist, rate limiting, error envelope.
