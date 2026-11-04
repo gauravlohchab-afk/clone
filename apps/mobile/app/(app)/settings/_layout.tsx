@@ -15,6 +15,7 @@ export default function SettingsLayout() {
       <Stack.Screen name="index" options={{ title: 'Settings' }} />
       <Stack.Screen name="profile" options={{ title: 'Edit profile' }} />
       <Stack.Screen name="privacy" options={{ title: 'Privacy' }} />
+      <Stack.Screen name="hidden" options={{ title: 'Blocked and muted' }} />
       <Stack.Screen name="security" options={{ title: 'Password and security' }} />
       <Stack.Screen name="preferences" options={{ title: 'Preferences' }} />
       <Stack.Screen name="account" options={{ title: 'Your account' }} />

@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from 'expo-router';
-import { ProfileView } from '../../components/ProfileView';
+import { ProfileView } from '../../../components/ProfileView';
 
 /** Deep-linkable public profile: <scheme>://u/<username> */
 export default function UserProfile() {

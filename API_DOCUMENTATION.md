@@ -62,7 +62,24 @@ Codes: `VALIDATION_FAILED 400`, `UNAUTHENTICATED 401`, `TOKEN_EXPIRED 401`, `SES
 ## Users — `/users`
 | Method | Path | Auth | Result |
 |---|---|---|---|
-| GET | `/:username` | optional | `PublicProfileDto` (with `viewer.isSelf`, `viewer.canViewContent`); 404 for hidden accounts |
+| GET | `/:username` | optional | `PublicProfileDto` (with `viewer.isSelf`, `viewer.canViewContent`, `viewer.relationship`); 404 for hidden accounts and for viewers the account has blocked |
+| POST | `/:username/follow` | required, verified email (200/h) | `FollowResultDto`; `status: 'requested'` for private accounts. Idempotent |
+| DELETE | `/:username/follow` | required | `FollowResultDto`; also cancels a pending request |
+| DELETE | `/:username/follower` | required | Removes them from your followers |
+| GET | `/:username/followers` · `/following` | optional | `Page<ProfileSummaryDto>`; 403 when the account is private and you don't follow it |
+| GET | `/:username/mutuals?limit` | required | `{ items: ProfileSummaryDto[], total }`: people you follow who follow them |
+| POST / DELETE | `/:username/block` | required (60/min) | `RelationshipDto`. Block removes follows and requests both ways |
+| POST / DELETE | `/:username/restrict` | required (60/min) | `RelationshipDto` |
+| POST / DELETE | `/:username/mute` | required (60/min) | POST body `{ posts, stories }` (at least one true). `RelationshipDto` |
+
+## Me — social (`/me`, authenticated)
+| Method | Path | Result |
+|---|---|---|
+| GET | `/follow-requests` | `Page<FollowRequestDto>` (incoming) |
+| POST | `/follow-requests/:id/approve` | Approves one request |
+| DELETE | `/follow-requests/:id` | 204; declines |
+| GET | `/suggestions?limit` (1–30, default 12) | `{ items: ProfileSummaryDto[] }` |
+| GET | `/blocked` · `/restricted` · `/muted` | `Page<ProfileSummaryDto>` (`MutedAccountDto` for muted) |
 
 ## Planned
-Phase 2: `/follows`, `/posts`, `/comments`, `/feed`, `/explore`, `/search`, `/hashtags`, `/collections`. Phase 3: `/media/uploads`, `/stories`, `/reels`, `/highlights`. Phase 4: `/conversations`, `/messages`, `/notifications`, `/push-tokens`, Socket.IO namespace `/rt`. Phase 5: `/reports`, `/admin/*`.
+Phase 2: `/posts`, `/comments`, `/feed`, `/explore`, `/search`, `/hashtags`, `/collections`. Phase 3: `/media/uploads`, `/stories`, `/reels`, `/highlights`. Phase 4: `/conversations`, `/messages`, `/notifications`, `/push-tokens`, Socket.IO namespace `/rt`. Phase 5: `/reports`, `/admin/*`.
