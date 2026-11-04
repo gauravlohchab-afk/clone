@@ -22,6 +22,9 @@ import { Privacy } from './pages/settings/Privacy';
 import { Security } from './pages/settings/Security';
 import { Preferences } from './pages/settings/Preferences';
 import { Account } from './pages/settings/Account';
+import { HiddenAccounts } from './pages/settings/HiddenAccounts';
+import { Connections } from './pages/social/Connections';
+import { FollowRequests } from './pages/social/FollowRequests';
 import type { SettingsDto } from '@vyro/types';
 import { api } from './lib/api';
 
@@ -55,15 +58,21 @@ export const router = createBrowserRouter([
               { path: 'security', element: <Security /> },
               { path: 'preferences', element: <Preferences /> },
               { path: 'account', element: <Account /> },
+              { path: 'hidden', element: <HiddenAccounts /> },
             ],
           },
+          { path: '/requests', element: <FollowRequests /> },
         ],
       },
     ],
   },
   {
     element: <AppShellOrPublic />,
-    children: [{ path: '/:username', element: <Profile /> }],
+    children: [
+      { path: '/:username', element: <Profile /> },
+      { path: '/:username/followers', element: <Connections kind="followers" /> },
+      { path: '/:username/following', element: <Connections kind="following" /> },
+    ],
   },
   { path: '*', element: <NotFound /> },
 ]);

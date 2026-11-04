@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router';
-import { Settings, UserRound, LogOut } from 'lucide-react';
+import { Settings, UserRound, LogOut, UserPlus } from 'lucide-react';
 import { useAuth } from '../stores/auth';
 import { Wordmark, Mark } from './Logo';
 import { Avatar } from './Avatar';
@@ -15,6 +15,7 @@ export function AppShell() {
   const username = user.username ?? '';
   const items = [
     { to: `/${username}`, label: 'Profile', icon: UserRound },
+    { to: '/requests', label: 'Requests', icon: UserPlus },
     { to: '/settings', label: 'Settings', icon: Settings },
   ];
   const linkCls = ({ isActive }: { isActive: boolean }) =>

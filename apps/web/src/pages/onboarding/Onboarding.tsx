@@ -6,7 +6,10 @@ import { z } from 'zod';
 import { Check, Loader2, MailCheck, X } from 'lucide-react';
 import { interestCatalog, limits } from '@vyro/config';
 import { username as usernameSchema } from '@vyro/validation';
-import type { MeDto, ProfileDto } from '@vyro/types';
+import type { MeDto, ProfileDto, ProfileSummaryDto } from '@vyro/types';
+import { social } from '../../lib/social';
+import { ProfileRow } from '../../components/social/ProfileRow';
+import { FollowButton } from '../../components/social/FollowButton';
 import { Wordmark } from '../../components/Logo';
 import { Button } from '../../components/Button';
 import { TextArea, TextField } from '../../components/Field';
@@ -15,8 +18,8 @@ import { api } from '../../lib/api';
 import { errorMessage } from '../../lib/form-errors';
 import { useAuth } from '../../stores/auth';
 
-type Step = 'verify' | 'username' | 'about' | 'interests';
-const order: Step[] = ['verify', 'username', 'about', 'interests'];
+type Step = 'verify' | 'username' | 'about' | 'interests' | 'people';
+const order: Step[] = ['verify', 'username', 'about', 'interests', 'people'];
 
 function firstStep(user: MeDto): Step {
   if (!user.emailVerified) return 'verify';
@@ -39,7 +42,8 @@ export function Onboarding() {
         {step === 'verify' && <VerifyStep onDone={() => setStep('username')} />}
         {step === 'username' && <UsernameStep onDone={() => setStep('about')} />}
         {step === 'about' && <AboutStep onDone={() => setStep('interests')} />}
-        {step === 'interests' && <InterestsStep />}
+        {step === 'interests' && <InterestsStep onDone={() => setStep('people')} />}
+        {step === 'people' && <PeopleStep />}
       </div>
     </div>
   );
@@ -164,9 +168,7 @@ function AboutStep({ onDone }: { onDone: () => void }) {
   );
 }
 
-function InterestsStep() {
-  const navigate = useNavigate();
-  const setUser = useAuth((s) => s.setUser);
+function InterestsStep({ onDone }: { onDone: () => void }) {
   const [picked, setPicked] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -194,6 +196,43 @@ function InterestsStep() {
         setError(null);
         try {
           await api.put('/api/v1/me/interests', { interests: picked });
+          onDone();
+        } catch (e) { setError(errorMessage(e)); setSaving(false); }
+      }}>Continue</Button>
+    </section>
+  );
+}
+
+/** Last step: real accounts matched on interests. Following is optional. */
+function PeopleStep() {
+  const navigate = useNavigate();
+  const setUser = useAuth((s) => s.setUser);
+  const [people, setPeople] = useState<ProfileSummaryDto[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    social.suggestions(12).then((r) => setPeople(r.items)).catch((e) => { setError(errorMessage(e)); setPeople([]); });
+  }, []);
+
+  return (
+    <section>
+      <h1 className="text-3xl font-bold">People you might like</h1>
+      <p className="mt-2 text-muted">Based on your interests. Follow as many as you like, or none.</p>
+      {error && <div className="mt-6"><Alert tone="error">{error}</Alert></div>}
+      {!people && <div className="flex justify-center py-10" role="status"><Loader2 className="size-6 animate-spin text-muted" aria-hidden="true" /><span className="sr-only">Loading suggestions</span></div>}
+      {people && people.length === 0 && !error && <p className="mt-8 text-sm text-muted">No suggestions yet. You can find people later from their profiles.</p>}
+      {people && people.length > 0 && (
+        <ul className="mt-6 divide-y divide-line/60">
+          {people.map((p) => (
+            <ProfileRow key={p.userId} profile={p} action={<FollowButton compact username={p.username} isPrivate={p.isPrivate} state={p.relationship ?? { following: false, requested: false }} />} />
+          ))}
+        </ul>
+      )}
+      <Button className="mt-10" block loading={saving} onClick={async () => {
+        setSaving(true);
+        setError(null);
+        try {
           const me = await api.post<MeDto>('/api/v1/me/onboarding/complete');
           setUser(me);
           navigate(`/${me.username}`, { replace: true });

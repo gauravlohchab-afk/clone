@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router';
 const sections = [
   { to: '/settings/profile', label: 'Edit profile' },
   { to: '/settings/privacy', label: 'Privacy' },
+  { to: '/settings/hidden', label: 'Blocked and muted' },
   { to: '/settings/security', label: 'Password and security' },
   { to: '/settings/preferences', label: 'Preferences' },
   { to: '/settings/account', label: 'Your account' },

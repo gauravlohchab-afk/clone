@@ -27,4 +27,5 @@ export const reservedUsernames = new Set([
   'settings', 'explore', 'search', 'reels', 'stories', 'messages', 'inbox',
   'notifications', 'saved', 'onboarding', 'about', 'terms', 'privacy', 'legal',
   'vyro', 'team', 'null', 'undefined', 'me', 'account', 'accounts', 'p', 'u',
+  'requests', 'forgot-password', 'reset-password', 'verify-email', 'followers', 'following',
 ]);
