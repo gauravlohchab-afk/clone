@@ -2,7 +2,7 @@
 
 **Your world. Your energy.** An original social platform for creating, connecting and discovering — web, iOS and Android on one backend.
 
-> Status: Phase 1 (accounts) code complete on web, iOS and Android; API integration run pending. Not production-ready. See [FEATURE_TRACKER.md](FEATURE_TRACKER.md) for an honest per-feature status and [docs/PLANNING.md](docs/PLANNING.md) for the plan and the external services still needed.
+> Status: Phase 1 (accounts) code complete on web, iOS and Android; API integration tests green in CI. Not production-ready. See [FEATURE_TRACKER.md](FEATURE_TRACKER.md) for an honest per-feature status and [docs/PLANNING.md](docs/PLANNING.md) for the plan and the external services still needed.
 
 ## Repository
 ```
