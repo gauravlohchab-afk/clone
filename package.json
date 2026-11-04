@@ -1,0 +1,21 @@
+{
+  "name": "vyro",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.28.0",
+  "engines": { "node": ">=22.12" },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @vyro/api --filter @vyro/web dev",
+    "dev:api": "pnpm --filter @vyro/api dev",
+    "dev:web": "pnpm --filter @vyro/web dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:unit": "pnpm -r test:unit",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "typescript": "~5.9.3"
+  }
+}

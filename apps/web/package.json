@@ -1,0 +1,47 @@
+{
+  "name": "@vyro/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p . && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p .",
+    "test:unit": "vitest run",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource-variable/space-grotesk": "^5.2.10",
+    "@hookform/resolvers": "^5.2.2",
+    "@vyro/config": "workspace:*",
+    "@vyro/shared": "workspace:*",
+    "@vyro/types": "workspace:*",
+    "@vyro/ui": "workspace:*",
+    "@vyro/validation": "workspace:*",
+    "framer-motion": "^12.23.0",
+    "lucide-react": "^1.0.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-hook-form": "^7.65.0",
+    "react-router": "^7.9.0",
+    "zod": "^4.1.12",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.14",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "jsdom": "^26.1.0",
+    "tailwindcss": "^4.1.14",
+    "vite": "^7.1.9",
+    "vitest": "^3.2.4"
+  }
+}

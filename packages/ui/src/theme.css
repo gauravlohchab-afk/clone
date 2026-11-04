@@ -1,0 +1,48 @@
+/* VYRO design tokens for Tailwind CSS v4. Mirrors src/tokens.ts. */
+@theme {
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
+  --font-sans: 'Inter Variable', 'Inter', system-ui, sans-serif;
+
+  --color-lime-300: #d3ff94; --color-lime-400: #c4ff6e; --color-lime-500: #b6ff4a; --color-lime-600: #8fd41f; --color-lime-700: #5e8f0a;
+  --color-violet-300: #b3a3ff; --color-violet-400: #9480ff; --color-violet-500: #7558ff; --color-violet-600: #5b3fe0; --color-violet-700: #4129b0;
+  --color-coral-300: #ffa597; --color-coral-400: #ff7f6c; --color-coral-500: #ff5c45; --color-coral-600: #e03e28; --color-coral-700: #b02a17;
+  --color-ink-950: #0b0c12; --color-ink-900: #11131c; --color-ink-800: #1a1d29; --color-ink-700: #262a3a; --color-ink-600: #3a3f54; --color-ink-500: #5a6078; --color-ink-400: #8a90a8;
+  --color-paper-50: #fbfaf7; --color-paper-100: #f4f3ef; --color-paper-200: #e9e7e0; --color-paper-300: #d9d6cc; --color-paper-400: #b8b4a7;
+
+  /* Semantic roles resolve to theme variables set below. */
+  --color-bg: var(--vy-bg);
+  --color-surface: var(--vy-surface);
+  --color-raised: var(--vy-raised);
+  --color-line: var(--vy-border);
+  --color-fg: var(--vy-text);
+  --color-muted: var(--vy-muted);
+  --color-primary: var(--vy-primary);
+  --color-on-primary: var(--vy-on-primary);
+  --color-link: var(--vy-link);
+  --color-secondary: var(--vy-secondary);
+  --color-danger: var(--vy-danger);
+  --color-focus: var(--vy-focus);
+
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px;
+}
+
+:root, [data-theme='light'] {
+  --vy-bg: #f4f3ef; --vy-surface: #fbfaf7; --vy-raised: #ffffff; --vy-border: #d9d6cc;
+  --vy-text: #11131c; --vy-muted: #5a6078; --vy-primary: #b6ff4a; --vy-on-primary: #11131c;
+  --vy-link: #5b3fe0; --vy-secondary: #5b3fe0; --vy-danger: #b02a17; --vy-focus: #5b3fe0;
+  color-scheme: light;
+}
+[data-theme='dark'] {
+  --vy-bg: #11131c; --vy-surface: #1a1d29; --vy-raised: #262a3a; --vy-border: #3a3f54;
+  --vy-text: #f4f3ef; --vy-muted: #8a90a8; --vy-primary: #b6ff4a; --vy-on-primary: #11131c;
+  --vy-link: #b6ff4a; --vy-secondary: #9480ff; --vy-danger: #ff7f6c; --vy-focus: #9480ff;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --vy-bg: #11131c; --vy-surface: #1a1d29; --vy-raised: #262a3a; --vy-border: #3a3f54;
+    --vy-text: #f4f3ef; --vy-muted: #8a90a8; --vy-primary: #b6ff4a; --vy-on-primary: #11131c;
+    --vy-link: #b6ff4a; --vy-secondary: #9480ff; --vy-danger: #ff7f6c; --vy-focus: #9480ff;
+    color-scheme: dark;
+  }
+}

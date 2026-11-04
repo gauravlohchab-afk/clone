@@ -1,0 +1,10 @@
+{
+  "name": "@vyro/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": { "typecheck": "tsc -p .", "test:unit": "vitest run", "test": "vitest run" },
+  "dependencies": { "zod": "^4.1.12" },
+  "devDependencies": { "vitest": "^3.2.4" }
+}

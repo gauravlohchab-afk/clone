@@ -1,0 +1,65 @@
+# Feature tracker
+
+Statuses: NOT STARTED · IN PROGRESS · IMPLEMENTED · TESTED · BLOCKED. A column is TESTED only when automated tests covering it have passed. Last updated: 2026-11-04.
+
+**Test evidence (2026-11-04):** packages 43 unit tests pass · API 21 unit/HTTP tests pass · web 5 component tests pass · API integration suite (31 tests across auth and profiles) written but **not yet executed** because the build sandbox cannot download a MongoDB binary. Rows that depend on that suite are IMPLEMENTED, not TESTED.
+
+## Phase 0 — Foundations
+| Feature | Frontend | Backend | Database | Integration | Tests | Remaining issues |
+|---|---|---|---|---|---|---|
+| Monorepo (pnpm workspaces, shared TS config) | IMPLEMENTED | IMPLEMENTED | – | IMPLEMENTED | TESTED | No GitHub repository yet; no lint config |
+| Brand config (provisional name) | IMPLEMENTED | IMPLEMENTED | – | IMPLEMENTED | TESTED | Name/domain/trademark unverified |
+| Design tokens, light/dark themes | IMPLEMENTED | – | – | IMPLEMENTED | TESTED | WCAG AA contrast unit-tested; RN theme pending mobile |
+| Logo, app icon, wordmark | IMPLEMENTED | – | – | – | – | Needs designer review and PNG exports for stores |
+| Component library (web) | IMPLEMENTED | – | – | – | IN PROGRESS | Button/Field/Alert/Toggle/Select/Avatar; no Storybook |
+| Planning docs | – | – | – | – | – | See docs/PLANNING.md |
+
+## Phase 1 — Accounts
+| Feature | Frontend | Backend | Database | Integration | Tests | Remaining issues |
+|---|---|---|---|---|---|---|
+| Email registration | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Validation + UI tested; DB flow awaiting integration run |
+| Minimum age (13) / under-18 private default | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Regional age rules need legal review |
+| Email verification | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Real delivery BLOCKED on SMTP/SES (dev logs emails) |
+| Login (email or username) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | UI tested; DB flow awaiting integration run |
+| Logout / logout all devices | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | |
+| Google sign-in | NOT STARTED | IMPLEMENTED | IMPLEMENTED | BLOCKED | IN PROGRESS | Needs Google OAuth client IDs; web button not added until then; not-configured path TESTED |
+| Forgot / reset password | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | |
+| Change / set password | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | |
+| Password hashing (argon2id) | – | TESTED | – | – | TESTED | |
+| Access + refresh tokens, rotation, reuse detection | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | JWT layer TESTED; rotation awaiting integration run |
+| Secure cookies + CSRF | IMPLEMENTED | TESTED | – | IMPLEMENTED | TESTED | Cookie flags asserted in integration suite (not yet run) |
+| Rate limiting / brute-force lockout | – | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Rate limiter TESTED; lockout awaiting integration run; Redis store in prod |
+| Device / session management | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | No geo-IP device naming yet |
+| Login activity | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | |
+| Two-factor (TOTP + recovery codes) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | TOTP/recovery crypto TESTED; flow awaiting integration run; UI login step TESTED |
+| Username availability + unique usernames | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Schema rules TESTED; no username-change cooldown yet |
+| Account deactivation | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | |
+| Account deletion (30-day grace) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | IN PROGRESS | `purgeDueAccounts` exists; scheduled BullMQ job not yet wired |
+| Data export (JSON) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Media archive arrives with Phase 3 |
+| Account recovery | IMPLEMENTED | IMPLEMENTED | – | IMPLEMENTED | IN PROGRESS | Via reset email + 2FA recovery codes; no support-assisted recovery |
+| Onboarding: welcome, register, verify, username, display name, bio, interests | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | |
+| Onboarding: profile picture | NOT STARTED | NOT STARTED | – | BLOCKED | NOT STARTED | Needs media storage (AWS, Phase 3) |
+| Onboarding: suggested accounts, feed init | NOT STARTED | NOT STARTED | – | NOT STARTED | NOT STARTED | Phase 2 (needs follows + posts) |
+| Profile view (public/private) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Follower-aware visibility in Phase 2 |
+| Edit profile (name, bio, website, location, type, category) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Schema TESTED |
+| Creator / professional accounts | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Insights/tools later |
+| Profile sharing | IMPLEMENTED | – | – | IMPLEMENTED | NOT STARTED | Web Share API / clipboard |
+| Settings: privacy, interactions, hidden words, theme, language, region, notifications | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IN PROGRESS | Only English UI; enforcement of interaction rules arrives with the features they govern |
+| Legal pages (terms, privacy, guidelines) | IMPLEMENTED | – | – | – | – | DRAFTS ONLY — not legally reviewed |
+| Mobile app (auth, onboarding, profile, settings) | NOT STARTED | – | – | – | NOT STARTED | Next step (Phase 1b) |
+| Admin app | NOT STARTED | NOT STARTED | – | – | NOT STARTED | Phase 5 |
+
+## Later phases
+| Feature | Frontend | Backend | Database | Integration | Tests | Remaining issues |
+|---|---|---|---|---|---|---|
+| Follow / unfollow / requests / lists / mutuals | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | Phase 2 |
+| Block / restrict / mute | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | Phase 2 |
+| Posts, comments, likes, saves, collections, hashtags, mentions | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | Phase 2 |
+| Feed ranking, explore, search | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | Phase 2 |
+| Media uploads (S3 presigned), processing, CDN | NOT STARTED | NOT STARTED | NOT STARTED | BLOCKED | NOT STARTED | AWS account required |
+| Stories, highlights, reels | NOT STARTED | NOT STARTED | NOT STARTED | BLOCKED | NOT STARTED | Phase 3, depends on media |
+| Messaging (DM, groups, realtime) | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | Phase 4 |
+| Notifications + push | NOT STARTED | NOT STARTED | NOT STARTED | BLOCKED | NOT STARTED | Push needs APNs/FCM via Expo |
+| Reports, moderation, appeals, admin RBAC, audit logs | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | Phase 5 |
+| Error monitoring (Sentry) | NOT STARTED | NOT STARTED | – | BLOCKED | NOT STARTED | DSN required; structured logging (pino) IMPLEMENTED |
+| Deployment | – | – | – | BLOCKED | – | Hosting, Atlas, Redis, domain |
