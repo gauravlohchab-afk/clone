@@ -4,7 +4,10 @@ import { Redirect, router } from 'expo-router';
 import { Check, MailCheck } from 'lucide-react-native';
 import { interestCatalog, limits } from '@vyro/config';
 import { username as usernameSchema } from '@vyro/validation';
-import type { MeDto } from '@vyro/types';
+import type { MeDto, ProfileSummaryDto } from '@vyro/types';
+import { social } from '../lib/social';
+import { ProfileRow } from '../components/social/ProfileRow';
+import { FollowButton } from '../components/social/FollowButton';
 import { Screen } from '../components/Screen';
 import { TextField } from '../components/TextField';
 import { Button } from '../components/Button';
@@ -16,8 +19,8 @@ import { useAuth } from '../stores/auth';
 import { useTheme } from '../stores/theme';
 import { fonts } from '../components/fonts';
 
-type Step = 'verify' | 'username' | 'about' | 'interests';
-const order: Step[] = ['verify', 'username', 'about', 'interests'];
+type Step = 'verify' | 'username' | 'about' | 'interests' | 'people';
+const order: Step[] = ['verify', 'username', 'about', 'interests', 'people'];
 const first = (u: MeDto): Step => (!u.emailVerified ? 'verify' : !u.username ? 'username' : 'about');
 
 export default function Onboarding() {
@@ -34,7 +37,8 @@ export default function Onboarding() {
       {step === 'verify' && <VerifyStep onDone={() => setStep('username')} />}
       {step === 'username' && <UsernameStep onDone={() => setStep('about')} />}
       {step === 'about' && <AboutStep onDone={() => setStep('interests')} />}
-      {step === 'interests' && <InterestsStep />}
+      {step === 'interests' && <InterestsStep onDone={() => setStep('people')} />}
+      {step === 'people' && <PeopleStep />}
     </Screen>
   );
 }
@@ -140,8 +144,7 @@ function AboutStep({ onDone }: { onDone: () => void }) {
   );
 }
 
-function InterestsStep() {
-  const setUser = useAuth((s) => s.setUser);
+function InterestsStep({ onDone }: { onDone: () => void }) {
   const { c } = useTheme();
   const [picked, setPicked] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -163,10 +166,41 @@ function InterestsStep() {
           );
         })}
       </View>
-      <Button title="Finish" loading={saving} disabled={picked.length === 0} onPress={async () => {
+      <Button title="Continue" loading={saving} disabled={picked.length === 0} onPress={async () => {
         setSaving(true); setError(null);
         try {
           await api.put('/api/v1/me/interests', { interests: picked });
+          onDone();
+        } catch (e) { setError(errorMessage(e)); setSaving(false); }
+      }} />
+    </View>
+  );
+}
+
+/** Last step: real accounts matched on interests. Following is optional. */
+function PeopleStep() {
+  const setUser = useAuth((s) => s.setUser);
+  const [people, setPeople] = useState<ProfileSummaryDto[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  useEffect(() => {
+    social.suggestions(12).then((r) => setPeople(r.items)).catch((e) => { setError(errorMessage(e)); setPeople([]); });
+  }, []);
+  return (
+    <View style={{ gap: 16 }}>
+      <Text variant="title" accessibilityRole="header">People you might like</Text>
+      <Text variant="muted">Based on your interests. Follow as many as you like, or none.</Text>
+      {error && <Alert tone="error">{error}</Alert>}
+      {!people && <Text variant="muted">Loading suggestions…</Text>}
+      {people && people.length === 0 && !error && <Text variant="muted">No suggestions yet. You can find people later from their profiles.</Text>}
+      <View>
+        {(people ?? []).map((p) => (
+          <ProfileRow key={p.userId} profile={p} action={<FollowButton compact username={p.username} isPrivate={p.isPrivate} state={p.relationship ?? { following: false, requested: false }} />} />
+        ))}
+      </View>
+      <Button title="Finish" loading={saving} onPress={async () => {
+        setSaving(true); setError(null);
+        try {
           setUser(await api.post<MeDto>('/api/v1/me/onboarding/complete'));
           router.replace('/profile');
         } catch (e) { setError(errorMessage(e)); setSaving(false); }

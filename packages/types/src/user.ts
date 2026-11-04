@@ -41,6 +41,8 @@ export interface PublicProfileDto extends ProfileDto {
   viewer: {
     isSelf: boolean;
     canViewContent: boolean;
+    /** Null for signed-out viewers. */
+    relationship: import('./social.js').RelationshipDto | null;
   };
 }
 

@@ -74,3 +74,7 @@ export const updateSettingsSchema = z
       .partial(),
   })
   .partial();
+
+export const muteSchema = z
+  .object({ posts: z.boolean().default(true), stories: z.boolean().default(true) })
+  .refine((m) => m.posts || m.stories, 'Choose posts, stories or both');

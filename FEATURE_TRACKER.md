@@ -39,8 +39,8 @@ Statuses: NOT STARTED · IN PROGRESS · IMPLEMENTED · TESTED · BLOCKED. A colu
 | Account recovery | IMPLEMENTED | IMPLEMENTED | – | IMPLEMENTED | TESTED | Via reset email + 2FA recovery codes; no support-assisted recovery |
 | Onboarding: welcome, register, verify, username, display name, bio, interests | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | – |
 | Onboarding: profile picture | NOT STARTED | NOT STARTED | – | BLOCKED | NOT STARTED | Needs media storage (AWS, Phase 3) |
-| Onboarding: suggested accounts, feed init | NOT STARTED | NOT STARTED | – | NOT STARTED | NOT STARTED | Phase 2 (needs follows + posts) |
-| Profile view (public/private) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | Follower-aware visibility in Phase 2 |
+| Onboarding: suggested accounts | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | Interest-matched, ranked by follower count; API integration-tested, UI step not component-tested. Feed initialisation waits for posts (Phase 2b) |
+| Profile view (public/private) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | Follower-aware visibility, relationship state, “Follows you”, mutuals line |
 | Edit profile (name, bio, website, location, type, category) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | – |
 | Creator / professional accounts | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | Insights/tools later |
 | Profile sharing | IMPLEMENTED | – | – | IMPLEMENTED | NOT STARTED | Web Share API / clipboard |
@@ -48,18 +48,29 @@ Statuses: NOT STARTED · IN PROGRESS · IMPLEMENTED · TESTED · BLOCKED. A colu
 | Legal pages (terms, privacy, guidelines) | IMPLEMENTED | – | – | – | – | DRAFTS ONLY — not legally reviewed |
 | Mobile app shell (Expo SDK 57, Expo Router, secure token store) | IMPLEMENTED | – | – | IMPLEMENTED | IN PROGRESS | Bundles build for iOS and Android; not yet run on a simulator or device (none in the build sandbox) |
 | Mobile auth (welcome, signup, login + 2FA, forgot/reset password) | IMPLEMENTED | – | – | IMPLEMENTED | IN PROGRESS | Login + 2FA screen TESTED with Jest; Google button waits for client IDs |
-| Mobile onboarding (verify, username, about, interests) | IMPLEMENTED | – | – | IMPLEMENTED | NOT STARTED | Photo step BLOCKED on media storage |
+| Mobile onboarding (verify, username, about, interests, suggested accounts) | IMPLEMENTED | – | – | IMPLEMENTED | NOT STARTED | Photo step BLOCKED on media storage |
 | Mobile profile + pull-to-refresh + share | IMPLEMENTED | – | – | IMPLEMENTED | NOT STARTED | |
 | Mobile settings (edit profile, privacy, security, preferences, account) | IMPLEMENTED | – | – | IMPLEMENTED | NOT STARTED | 2FA setup uses otpauth link + copyable key; data export shares JSON via the system share sheet |
 | Mobile deep links (`vyro://verify-email`, `reset-password`, `u/<username>`) | IMPLEMENTED | – | – | IN PROGRESS | NOT STARTED | Emails link to the web app today; https universal/app links BLOCKED on a domain |
 | Push notifications | NOT STARTED | NOT STARTED | NOT STARTED | BLOCKED | NOT STARTED | Phase 4; needs EAS project + APNs/FCM |
 | Admin app | NOT STARTED | NOT STARTED | – | – | NOT STARTED | Phase 5 |
 
+## Phase 2a — Social graph
+| Feature | Frontend | Backend | Database | Integration | Tests | Remaining issues |
+|---|---|---|---|---|---|---|
+| Follow / unfollow (idempotent, counts in transactions) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | API integration + web/mobile component tests. No follow notifications until Phase 4 |
+| Follow requests for private accounts (approve, decline, cancel, auto-approve on going public) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | Inbox at web `/requests`, mobile Settings → Follow requests; no unread badge until notifications |
+| Remove follower | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | UI path not component-tested |
+| Followers / following lists, mutuals | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | Private lists hidden from non-followers; list pages not component-tested |
+| Suggested accounts | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | Interests + popularity only; no graph-based (friends-of-friends) ranking yet |
+| Block (removes follows both ways; target gets 404) | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | Will also hide comments/likes/DMs as those features ship |
+| Restrict | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | Stored and listed; its effect (comment approval, DM requests) applies once comments and DMs exist |
+| Mute posts / stories | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | Stored and listed; filtering applies once feed (2c) and stories (3) exist |
+| Blocked / restricted / muted settings lists | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | IMPLEMENTED | TESTED | API tested; list screens not component-tested |
+
 ## Later phases
 | Feature | Frontend | Backend | Database | Integration | Tests | Remaining issues |
 |---|---|---|---|---|---|---|
-| Follow / unfollow / requests / lists / mutuals | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | Phase 2 |
-| Block / restrict / mute | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | Phase 2 |
 | Posts, comments, likes, saves, collections, hashtags, mentions | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | Phase 2 |
 | Feed ranking, explore, search | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | NOT STARTED | Phase 2 |
 | Media uploads (S3 presigned), processing, CDN | NOT STARTED | NOT STARTED | NOT STARTED | BLOCKED | NOT STARTED | AWS account required |

@@ -70,13 +70,13 @@ describe('profile editing and onboarding', () => {
     const pub = await h.http().get('/api/v1/users/nova');
     expect(pub.status).toBe(200);
     expect(pub.body.email).toBeUndefined();
-    expect(pub.body.viewer).toEqual({ isSelf: false, canViewContent: true });
+    expect(pub.body.viewer).toMatchObject({ isSelf: false, canViewContent: true, relationship: null });
 
     await h.http().patch('/api/v1/me/profile').set(bearer(owner.access)).send({ isPrivate: true });
     const asViewer = await h.http().get('/api/v1/users/nova').set(bearer(viewer.access));
     expect(asViewer.body.viewer.canViewContent).toBe(false);
     const asSelf = await h.http().get('/api/v1/users/nova').set(bearer(owner.access));
-    expect(asSelf.body.viewer).toEqual({ isSelf: true, canViewContent: true });
+    expect(asSelf.body.viewer).toMatchObject({ isSelf: true, canViewContent: true });
   });
 
   it('cannot change role through any profile or settings endpoint', async () => {

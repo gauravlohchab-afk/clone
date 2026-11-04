@@ -1,18 +1,16 @@
 import type { PublicProfileDto } from '@vyro/types';
-import { notFound } from '../../lib/errors.js';
-import { Profile } from './profile.model.js';
 import { toProfileDto } from '../users/users.mapper.js';
+import { canViewContent, getRelationship, resolveVisibleProfile } from '../relationships/relationships.service.js';
 
 /**
- * Profile lookup with visibility rules. Phase 2 extends `canViewContent`
- * with follow relationships and blocks (a blocked viewer gets 404).
+ * Profile lookup with visibility rules: hidden accounts and accounts that
+ * block the viewer are 404; private accounts hide content from non-followers.
  */
 export async function getPublicProfile(username: string, viewerId?: string): Promise<PublicProfileDto> {
-  const profile = await Profile.findOne({ username: username.toLowerCase(), visible: true }).lean();
-  if (!profile) throw notFound('This account does not exist or is unavailable');
-  const isSelf = !!viewerId && String(profile.userId) === viewerId;
+  const profile = await resolveVisibleProfile(username, viewerId);
+  const relationship = viewerId ? await getRelationship(viewerId, profile.userId) : null;
   return {
     ...toProfileDto(profile),
-    viewer: { isSelf, canViewContent: isSelf || !profile.isPrivate },
+    viewer: { isSelf: !!relationship?.isSelf, canViewContent: canViewContent(profile, relationship), relationship },
   };
 }

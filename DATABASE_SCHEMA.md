@@ -40,13 +40,21 @@ Indexes: `refreshHash` unique · `retired.hash` · `{userId, revokedAt, lastUsed
 ### loginevents
 `userId`, `type`, `method`, `ip`, `userAgent`, `createdAt`. Index `{userId, createdAt desc}`; TTL 180 days.
 
+## Implemented (Phase 2a)
+
+| Collection | Key fields | Indexes / constraints |
+|---|---|---|
+| follows | followerId, followeeId | unique `{followerId, followeeId}`; `{followeeId, createdAt, _id}`; `{followerId, createdAt, _id}` |
+| followrequests | requesterId, targetId | unique `{requesterId, targetId}`; `{targetId, createdAt}`. Approve = delete request + insert follow in one transaction |
+| blocks / restrictions | userId, targetId | unique `{userId, targetId}`; `{targetId}` |
+| mutes | userId, targetId, posts, stories | unique `{userId, targetId}` |
+
+`profiles.counts.followers/following` change only inside the same transaction as the follow edge, guarded so they never go below zero. Account purge deletes every row above that mentions the user.
+
 ## Designed for later phases
 
 | Collection | Key fields | Indexes / constraints |
 |---|---|---|
-| follows | followerId, followeeId | unique `{followerId, followeeId}`; `{followeeId, createdAt}` |
-| followrequests | requesterId, targetId, status | unique `{requesterId, targetId}` |
-| blocks / restrictions / mutes | userId, targetId, (mute scope) | unique `{userId, targetId}`; reverse index on targetId |
 | posts | authorId, type (image/video/carousel/reel), caption, mediaIds[], hashtags[], mentions[], location, altTexts, visibility, counts, editedAt, hiddenAt, removedAt | `{authorId, createdAt}`; `{hashtags, createdAt}`; `{createdAt}` for explore; text index caption |
 | media | ownerId, kind, status (pending/processing/ready/failed/deleted), s3Key, variants[], width, height, duration, mime, bytes, blurhash | `{ownerId, createdAt}`; `{status, updatedAt}` (stuck job sweep) |
 | comments | postId, authorId, parentId, body, mentions, counts, removedAt | `{postId, parentId, createdAt}` |

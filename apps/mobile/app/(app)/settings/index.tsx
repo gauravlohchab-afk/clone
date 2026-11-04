@@ -11,6 +11,8 @@ import { useTheme } from '../../../stores/theme';
 const items: { href: Href; label: string }[] = [
   { href: '/settings/profile', label: 'Edit profile' },
   { href: '/settings/privacy', label: 'Privacy' },
+  { href: '/settings/hidden', label: 'Blocked and muted' },
+  { href: '/requests', label: 'Follow requests' },
   { href: '/settings/security', label: 'Password and security' },
   { href: '/settings/preferences', label: 'Preferences' },
   { href: '/settings/account', label: 'Your account' },
