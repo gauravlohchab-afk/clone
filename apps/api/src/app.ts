@@ -11,6 +11,7 @@ import { limiter } from './middleware/rate-limit.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { meRoutes } from './modules/users/users.routes.js';
 import { profileRoutes } from './modules/profiles/profiles.routes.js';
+import { meSocialRoutes, userSocialRoutes } from './modules/follows/social.routes.js';
 
 export function createApp(ctx: AppContext) {
   const app = express();
@@ -48,7 +49,9 @@ export function createApp(ctx: AppContext) {
   const api = express.Router();
   api.use(limiter(ctx, 'global', { windowMs: 60_000, limit: 600 }));
   api.use('/auth', authRoutes(ctx));
+  api.use('/me', meSocialRoutes(ctx));
   api.use('/me', meRoutes(ctx));
+  api.use('/users', userSocialRoutes(ctx));
   api.use('/users', profileRoutes(ctx));
   app.use('/api/v1', api);
 

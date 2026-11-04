@@ -9,6 +9,8 @@ import { Settings } from '../settings/settings.model.js';
 import { Session } from '../auth/session.model.js';
 import { AuthToken } from '../auth/auth-token.model.js';
 import { LoginEvent } from '../auth/login-event.model.js';
+import { approveAllPending } from '../follows/follows.service.js';
+import { purgeRelationships } from '../follows/purge.js';
 import { toLoginActivityDto, toMeDto, toProfileDto, toSessionDto, toSettingsDto } from './users.mapper.js';
 
 const DELETION_GRACE_DAYS = 30;
@@ -80,9 +82,11 @@ async function requireProfile(userId: string) {
 
 export async function updateProfile(userId: string, input: Record<string, unknown>) {
   const profile = await requireProfile(userId);
+  const wasPrivate = profile.isPrivate;
   profile.set(input);
   await profile.save();
-  return toProfileDto(profile.toObject());
+  if (wasPrivate && !profile.isPrivate) await approveAllPending(profile.userId);
+  return toProfileDto((await Profile.findById(profile._id).lean())!);
 }
 
 export async function setInterests(userId: string, interests: string[]) {
@@ -166,6 +170,7 @@ const purgeHooks: PurgeHook[] = [
   async (id) => void (await Session.deleteMany({ userId: id })),
   async (id) => void (await AuthToken.deleteMany({ userId: id })),
   async (id) => void (await LoginEvent.deleteMany({ userId: id })),
+  purgeRelationships,
 ];
 export const registerPurgeHook = (hook: PurgeHook) => purgeHooks.push(hook);
 
